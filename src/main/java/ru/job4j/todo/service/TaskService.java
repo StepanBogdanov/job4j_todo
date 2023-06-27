@@ -11,4 +11,6 @@ public interface TaskService {
     Collection<Task> findDone();
 
     Collection<Task> findNew();
+
+    Task save(Task task);
 }

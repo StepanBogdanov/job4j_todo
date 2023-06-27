@@ -27,4 +27,9 @@ public class SimpleTaskService implements TaskService{
     public Collection<Task> findNew() {
         return taskRepository.findNew();
     }
+
+    @Override
+    public Task save(Task task) {
+        return taskRepository.save(task);
+    }
 }

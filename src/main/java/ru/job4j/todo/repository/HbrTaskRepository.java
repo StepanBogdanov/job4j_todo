@@ -62,5 +62,20 @@ public class HbrTaskRepository implements TaskRepository{
         }
         return tasks;
     }
+
+    @Override
+    public Task save(Task task) {
+        Session session = sessionFactory.openSession();
+        try {
+            session.beginTransaction();
+            session.save(task);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return task;
+    }
 }
 
