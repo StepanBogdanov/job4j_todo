@@ -6,6 +6,7 @@ import ru.job4j.todo.model.Task;
 import ru.job4j.todo.repository.TaskRepository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -31,5 +32,15 @@ public class SimpleTaskService implements TaskService{
     @Override
     public Task save(Task task) {
         return taskRepository.save(task);
+    }
+
+    @Override
+    public Optional<Task> findById(int id) {
+        return taskRepository.findById(id);
+    }
+
+    @Override
+    public void update(Task task) {
+        taskRepository.update(task);
     }
 }
