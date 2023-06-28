@@ -109,5 +109,20 @@ public class HbrTaskRepository implements TaskRepository{
             session.close();
         }
     }
+
+    @Override
+    public void delete(int id) {
+        Session session = sessionFactory.openSession();
+        try {
+            session.beginTransaction();
+            session.createQuery("DELETE FROM Task WHERE id = :taskId")
+                    .setParameter("taskId", id).executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+    }
 }
 

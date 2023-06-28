@@ -59,14 +59,31 @@ public class TaskController {
         return "/tasks/one";
     }
 
+    @GetMapping("/edit/{id}")
+    public String getUpdatePage(Model model, @PathVariable int id) {
+        var taskOptional = taskService.findById(id);
+        if (taskOptional.isEmpty()) {
+            model.addAttribute("message", "Задание с указанным идентификатором не найдено");
+            return "errors/404";
+        }
+        model.addAttribute("task", taskOptional.get());
+        return "tasks/edit/update";
+    }
+
     @PostMapping("/update")
     public String update(@ModelAttribute Task task, Model model) {
         try {
             taskService.update(task);
-            return "redirect:/tasks/list/done";
+            return "redirect:/tasks/list/all";
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             return "errors/404";
         }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(Model model, @PathVariable int id) {
+        taskService.delete(id);
+        return "redirect:/tasks/list/all";
     }
 }

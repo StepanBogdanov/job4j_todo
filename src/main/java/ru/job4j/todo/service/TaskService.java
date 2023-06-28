@@ -18,4 +18,6 @@ public interface TaskService {
     Optional<Task> findById(int id);
 
     void update(Task task);
+
+    void delete(int id);
 }

@@ -43,4 +43,9 @@ public class SimpleTaskService implements TaskService{
     public void update(Task task) {
         taskRepository.update(task);
     }
+
+    @Override
+    public void delete(int id) {
+        taskRepository.delete(id);
+    }
 }
