@@ -6,13 +6,14 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
-public class HbrTaskRepository implements TaskRepository {
+public class HibernateTaskRepository implements TaskRepository {
 
     private SessionFactory sessionFactory;
 
@@ -54,7 +55,9 @@ public class HbrTaskRepository implements TaskRepository {
         List<Task> tasks = List.of();
         try {
             session.beginTransaction();
-            tasks = session.createQuery("FROM Task WHERE created >= (current_date - 3) ORDER BY id").list();
+            LocalDateTime boundaryDate = LocalDateTime.now().minusDays(3);
+            tasks = session.createQuery("FROM Task WHERE created >= :bdate ORDER BY id")
+                    .setParameter("bdate", boundaryDate).list();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -97,25 +100,35 @@ public class HbrTaskRepository implements TaskRepository {
     }
 
     @Override
-    public void update(Task task) {
+    public boolean update(Task task) {
         Session session = sessionFactory.openSession();
+        int updatedStrings = 0;
         try {
             session.beginTransaction();
-            session.update(task);
+            String hql = "UPDATE Task SET title = :uTitle, description = :uDescription, created = :uCreated, done = :uDone WHERE id = :uId";
+            updatedStrings = session.createQuery(hql)
+                    .setParameter("uTitle", task.getTitle())
+                    .setParameter("uDescription", task.getDescription())
+                    .setParameter("uCreated", task.getCreated())
+                    .setParameter("uDone", task.getDone())
+                    .setParameter("uId", task.getId())
+                    .executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
+        return updatedStrings > 0;
     }
 
     @Override
-    public void delete(int id) {
+    public boolean delete(int id) {
         Session session = sessionFactory.openSession();
+        int deletedStrings = 0;
         try {
             session.beginTransaction();
-            session.createQuery("DELETE FROM Task WHERE id = :taskId")
+            deletedStrings = session.createQuery("DELETE FROM Task WHERE id = :taskId")
                     .setParameter("taskId", id).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -123,6 +136,7 @@ public class HbrTaskRepository implements TaskRepository {
         } finally {
             session.close();
         }
+        return deletedStrings > 0;
     }
 }
 

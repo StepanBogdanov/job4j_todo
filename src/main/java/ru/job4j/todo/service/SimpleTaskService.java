@@ -40,12 +40,12 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public void update(Task task) {
-        taskRepository.update(task);
+    public boolean update(Task task) {
+        return taskRepository.update(task);
     }
 
     @Override
-    public void delete(int id) {
-        taskRepository.delete(id);
+    public boolean delete(int id) {
+        return taskRepository.delete(id);
     }
 }

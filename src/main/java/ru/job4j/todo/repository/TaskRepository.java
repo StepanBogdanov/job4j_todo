@@ -17,7 +17,7 @@ public interface TaskRepository {
 
     Optional<Task> findById(int id);
 
-    void update(Task task);
+    boolean update(Task task);
 
-    void delete(int id);
+    boolean delete(int id);
  }
