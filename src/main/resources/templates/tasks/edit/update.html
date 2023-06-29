@@ -30,6 +30,10 @@
         <form class="mt-3" th:action="@{/tasks/update}" method="post" th:object="${task}">
             <input type="hidden" name="id" th:field="*{id}">
             <div class="mb-3">
+                <label for="title" class="form-label"><b>Название</b></label>
+                <input type="text"  class="form-control" id="title" name="title" th:field="*{title}">
+            </div>
+            <div class="mb-3">
                 <label for="description" class="form-label"><b>Описание задания</b></label>
                 <input type="text"  class="form-control" id="description" name="description" th:field="*{description}">
             </div>
