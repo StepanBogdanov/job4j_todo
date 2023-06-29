@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
-public class HbrTaskRepository implements TaskRepository{
+public class HbrTaskRepository implements TaskRepository {
 
     private SessionFactory sessionFactory;
 
