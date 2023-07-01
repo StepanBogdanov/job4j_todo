@@ -68,6 +68,15 @@ public class TaskController {
         return "tasks/edit/update";
     }
 
+    @PostMapping("/done")
+    public String doneTask(@ModelAttribute Task task, Model model) {
+        if (!taskService.done(task)) {
+            model.addAttribute("message", "Не удалось выполнить задание");
+            return "errors/404";
+        }
+        return "redirect:/tasks/list/done";
+    }
+
     @PostMapping("/update")
     public String update(@ModelAttribute Task task, Model model) {
         if (!taskService.update(task)) {

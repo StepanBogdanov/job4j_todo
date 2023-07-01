@@ -100,6 +100,23 @@ public class HibernateTaskRepository implements TaskRepository {
     }
 
     @Override
+    public boolean done(Task task) {
+        Session session = sessionFactory.openSession();
+        int updatedStrings = 0;
+        try {
+            session.beginTransaction();
+            updatedStrings = session.createQuery("UPDATE Task SET done = true WHERE id = :uId")
+                    .setParameter("uId", task.getId()).executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return  updatedStrings > 0;
+    }
+
+    @Override
     public boolean update(Task task) {
         Session session = sessionFactory.openSession();
         int updatedStrings = 0;
