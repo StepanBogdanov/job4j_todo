@@ -19,28 +19,11 @@ public class HibernateUserRepository implements UserRepository {
     @Override
     public Optional<User> save(User user) {
         Session session = sessionFactory.openSession();
-        try {
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return Optional.of(user);
-    }
-
-    @Override
-    public Optional<User> findByLoginAndPassword(String login, String password) {
-        Session session = sessionFactory.openSession();
         Optional<User> userOptional = Optional.empty();
         try {
             session.beginTransaction();
-            userOptional = session.createQuery("FROM todo_users WHERE login = :login AND password = :password")
-                    .setParameter("login", login)
-                    .setParameter("password", password)
-                    .uniqueResultOptional();
+            session.save(user);
+            userOptional = Optional.of(user);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -51,13 +34,15 @@ public class HibernateUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findUserByLogin(String login) {
+    public Optional<User> findByLoginAndPassword(String login, String password) {
         Session session = sessionFactory.openSession();
         Optional<User> userOptional = Optional.empty();
         try {
             session.beginTransaction();
-            userOptional = session.createQuery("FROM todo_users WHERE login = :login")
-                    .setParameter("login", login).uniqueResultOptional();
+            userOptional = session.createQuery("FROM User WHERE login = :login AND password = :password")
+                    .setParameter("login", login)
+                    .setParameter("password", password)
+                    .uniqueResultOptional();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -73,7 +58,7 @@ public class HibernateUserRepository implements UserRepository {
         int updatedStrings = 0;
         try {
             session.beginTransaction();
-            updatedStrings = session.createQuery("DELETE FROM todo_users WHERE id = :id")
+            updatedStrings = session.createQuery("DELETE FROM User WHERE id = :id")
                     .setParameter("id", id).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
@@ -90,7 +75,7 @@ public class HibernateUserRepository implements UserRepository {
         Collection<User> users = List.of();
         try {
             session.beginTransaction();
-            users = session.createQuery("FROM todo_users").list();
+            users = session.createQuery("FROM User").list();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();

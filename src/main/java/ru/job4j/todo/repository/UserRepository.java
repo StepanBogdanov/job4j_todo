@@ -11,8 +11,6 @@ public interface UserRepository {
 
     Optional<User> findByLoginAndPassword(String login, String password);
 
-    Optional<User> findUserByLogin(String login);
-
     boolean deleteById(int id);
 
     Collection<User> findAll();
