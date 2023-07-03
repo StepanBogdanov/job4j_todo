@@ -23,8 +23,8 @@ public class HibernateUserRepository implements UserRepository {
         try {
             session.beginTransaction();
             session.save(user);
-            userOptional = Optional.of(user);
             session.getTransaction().commit();
+            userOptional = Optional.of(user);
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
