@@ -57,20 +57,9 @@ public class TaskController {
         return "/tasks/one";
     }
 
-    @GetMapping("/edit/{id}")
-    public String getUpdatePage(Model model, @PathVariable int id) {
-        var taskOptional = taskService.findById(id);
-        if (taskOptional.isEmpty()) {
-            model.addAttribute("message", "Задание с указанным идентификатором не найдено");
-            return "errors/404";
-        }
-        model.addAttribute("task", taskOptional.get());
-        return "tasks/edit/update";
-    }
-
-    @PostMapping("/done")
-    public String doneTask(@ModelAttribute Task task, Model model) {
-        if (!taskService.done(task)) {
+    @GetMapping("/done/{id}")
+    public String doneTask(Model model, @PathVariable int id) {
+        if (!taskService.done(id)) {
             model.addAttribute("message", "Не удалось выполнить задание");
             return "errors/404";
         }

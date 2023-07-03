@@ -40,8 +40,8 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public boolean done(Task task) {
-        return taskRepository.done(task);
+    public boolean done(int id) {
+        return taskRepository.done(id);
     }
 
     @Override

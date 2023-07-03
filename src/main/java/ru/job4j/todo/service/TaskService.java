@@ -17,7 +17,7 @@ public interface TaskService {
 
     Optional<Task> findById(int id);
 
-    boolean done(Task task);
+    boolean done(int id);
 
     boolean update(Task task);
 
