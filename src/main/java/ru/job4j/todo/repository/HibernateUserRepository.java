@@ -8,80 +8,40 @@ import ru.job4j.todo.model.User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class HibernateUserRepository implements UserRepository {
 
-    private SessionFactory sessionFactory;
+    private CrudRepository crudRepository;
 
     @Override
     public Optional<User> save(User user) {
-        Session session = sessionFactory.openSession();
         Optional<User> userOptional = Optional.empty();
         try {
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
+            crudRepository.run(session -> session.persist(user));
             userOptional = Optional.of(user);
         } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
         }
         return userOptional;
     }
 
     @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
-        Session session = sessionFactory.openSession();
-        Optional<User> userOptional = Optional.empty();
-        try {
-            session.beginTransaction();
-            userOptional = session.createQuery("FROM User WHERE login = :login AND password = :password")
-                    .setParameter("login", login)
-                    .setParameter("password", password)
-                    .uniqueResultOptional();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return userOptional;
+        return crudRepository.optional("FROM User WHERE login = :login AND password = :password", User.class,
+                Map.of("login", login,
+                        "password", password));
     }
 
     @Override
     public boolean deleteById(int id) {
-        Session session = sessionFactory.openSession();
-        int updatedStrings = 0;
-        try {
-            session.beginTransaction();
-            updatedStrings = session.createQuery("DELETE FROM User WHERE id = :id")
-                    .setParameter("id", id).executeUpdate();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return updatedStrings > 0;
+        return crudRepository.bool("DELETE FROM User WHERE id = :id", Map.of("id", id));
     }
 
     @Override
     public Collection<User> findAll() {
-        Session session = sessionFactory.openSession();
-        Collection<User> users = List.of();
-        try {
-            session.beginTransaction();
-            users = session.createQuery("FROM User").list();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return users;
+        return crudRepository.query("FROM User", User.class);
     }
 }
