@@ -10,5 +10,6 @@
     <include file="scripts/002_ddl_add_column_title_into_tasks.sql" relativeToChangelogFile="true"/>
     <include file="scripts/003_ddl_create_todo_users_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/004_ddl_add_unique_key_to_login_into_users.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/005_ddl_add_column_user_into_tasks.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
