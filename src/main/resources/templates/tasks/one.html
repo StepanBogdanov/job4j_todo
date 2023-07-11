@@ -45,6 +45,12 @@
                 <label for="description" class="form-label"><b>Описание задания</b></label>
                 <input type="text" class="form-control" id="description" name="description" th:field="*{description}">
             </div>
+            <div class="mb-3">
+                <label for="priority"><b>Приоритет</b></label>
+                <select class="form-control" id="priority" name="priority.id">
+                    <option th:each="pr : ${priorities}" th:value="${pr.id}" th:text="${pr.name}" th:field="*{priority.id}" th:selected="${pr.id==task.priority.id}"></option>
+                </select>
+            </div>
             <input type="hidden" name="created" th:field="*{created}">
             <input type="hidden" name="done" th:field="*{done}">
             <div class="mb-3 row">

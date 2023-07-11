@@ -17,18 +17,19 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public Collection<Task> findAll() {
-        return crudRepository.query("FROM Task ORDER BY id", Task.class);
+        return crudRepository.query("FROM Task t JOIN FETCH t.priority ORDER BY t.id", Task.class);
     }
 
     @Override
     public Collection<Task> findDone() {
-        return crudRepository.query("FROM Task WHERE done = true ORDER BY id", Task.class);
+        return crudRepository.query("FROM Task t JOIN FETCH t.priority WHERE t.done = true ORDER BY t.id",
+                Task.class);
     }
 
     @Override
     public Collection<Task> findNew() {
-        return crudRepository.query("FROM Task WHERE created >= :bDate ORDER BY id", Task.class,
-                Map.of("bDate", LocalDateTime.now().minusDays(3)));
+        return crudRepository.query("FROM Task t JOIN FETCH t.priority WHERE t.created >= :bDate ORDER BY t.id",
+                Task.class, Map.of("bDate", LocalDateTime.now().minusDays(3)));
     }
 
     @Override
@@ -39,27 +40,31 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public Optional<Task> findById(int id) {
-        return crudRepository.optional("from Task where id = :id", Task.class, Map.of("id", id));
+        return crudRepository.optional("from Task t JOIN FETCH t.priority where t.id = :id",
+                Task.class, Map.of("id", id));
     }
 
     @Override
     public boolean done(int id) {
-        return crudRepository.bool("UPDATE Task SET done = true WHERE id = :uId", Map.of("uId", id));
+        return crudRepository.bool("UPDATE Task SET done = true WHERE id = :uId",
+                Map.of("uId", id));
     }
 
     @Override
     public boolean update(Task task) {
-        return crudRepository.bool("UPDATE Task SET title = :uTitle, description = :uDescription, created = :uCreated, done = :uDone WHERE id = :uId",
+        return crudRepository.bool("UPDATE Task SET title = :uTitle, description = :uDescription, created = :uCreated, done = :uDone, priority_id = :uPriority WHERE id = :uId",
                 Map.of("uTitle", task.getTitle(),
                         "uDescription", task.getDescription(),
                         "uCreated", task.getCreated(),
                         "uDone", task.getDone(),
-                        "uId", task.getId()));
+                        "uId", task.getId(),
+                        "uPriority", task.getPriority()));
     }
 
     @Override
     public boolean delete(int id) {
-        return crudRepository.bool("DELETE FROM Task WHERE id = :taskId", Map.of("taskId", id));
+        return crudRepository.bool("DELETE FROM Task t JOIN FETCH t.priority WHERE t.id = :taskId",
+                Map.of("taskId", id));
     }
 }
 
