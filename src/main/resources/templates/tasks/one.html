@@ -51,6 +51,10 @@
                     <option th:each="pr : ${priorities}" th:value="${pr.id}" th:text="${pr.name}" th:field="*{priority.id}" th:selected="${pr.id==task.priority.id}"></option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="category" class="form-label"><b>Категория</b></label>
+                <input type="text" class="form-control" id="category"  th:field="*{categories}" readonly>
+            </div>
             <input type="hidden" name="created" th:field="*{created}">
             <input type="hidden" name="done" th:field="*{done}">
             <div class="mb-3 row">

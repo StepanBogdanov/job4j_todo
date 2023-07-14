@@ -17,18 +17,19 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public Collection<Task> findAll() {
-        return crudRepository.query("FROM Task t JOIN FETCH t.priority ORDER BY t.id", Task.class);
+        return crudRepository.query("SELECT DISTINCT t FROM Task t JOIN FETCH t.priority LEFT JOIN FETCH t.categories ORDER BY t.id",
+                Task.class);
     }
 
     @Override
     public Collection<Task> findDone() {
-        return crudRepository.query("FROM Task t JOIN FETCH t.priority WHERE t.done = true ORDER BY t.id",
+        return crudRepository.query("SELECT DISTINCT t FROM Task t JOIN FETCH t.priority LEFT JOIN FETCH t.categories WHERE t.done = true ORDER BY t.id",
                 Task.class);
     }
 
     @Override
     public Collection<Task> findNew() {
-        return crudRepository.query("FROM Task t JOIN FETCH t.priority WHERE t.created >= :bDate ORDER BY t.id",
+        return crudRepository.query("SELECT DISTINCT t FROM Task t JOIN FETCH t.priority LEFT JOIN FETCH t.categories WHERE t.created >= :bDate ORDER BY t.id",
                 Task.class, Map.of("bDate", LocalDateTime.now().minusDays(3)));
     }
 
@@ -40,7 +41,7 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public Optional<Task> findById(int id) {
-        return crudRepository.optional("from Task t JOIN FETCH t.priority where t.id = :id",
+        return crudRepository.optional("from Task t JOIN FETCH t.priority LEFT JOIN FETCH t.categories where t.id = :id",
                 Task.class, Map.of("id", id));
     }
 

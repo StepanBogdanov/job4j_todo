@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tasks")
@@ -28,8 +30,20 @@ public class Task {
     @JoinColumn(name = "priority_id")
     private Priority priority;
 
+    @ManyToMany
+    @JoinTable(
+            name = "tasks_categories",
+            joinColumns = { @JoinColumn(name = "task_id") },
+            inverseJoinColumns = { @JoinColumn(name = "category_id") }
+    )
+    private List<Category> categories = new ArrayList<>();
+
     public boolean getDone() {
         return done;
+    }
+
+    public void addCategory(Category category) {
+        categories.add(category);
     }
 
 }

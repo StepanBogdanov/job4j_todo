@@ -50,6 +50,23 @@
                     <option th:each="priority : ${priorities}" th:value="${priority.id}" th:text="${priority.name}"></option>
                 </select>
             </div>
+<!--            <div class="form-group now">-->
+<!--                <label class="col-form-label col-sm-4">Категории:</label>-->
+<!--                <div class="col-sm-8 left-text">-->
+<!--                    <th:block th:each="category : ${categories}">-->
+<!--                        <div>-->
+<!--                            <input type="checkbox" th:field="*{categories}" th:value="${category.id}"-->
+<!--                            th:text="${category.name}">-->
+<!--                        </div>-->
+<!--                    </th:block>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="mb-3">
+                <label for="category"><b>Категория</b></label>
+                <select class="form-control" id="category" name="categoriesId" multiple="multiple" size="3">
+                    <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                </select>
+            </div>
             <div class="mb-3 row">
                 <div class="col-6"></div>
                 <div class="col-6">
