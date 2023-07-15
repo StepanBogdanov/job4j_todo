@@ -19,6 +19,12 @@ public class HibernateCategoryRepository implements CategoryRepository {
     }
 
     @Override
+    public Collection<Category> findById(Collection<Integer> listId) {
+        return crudRepository.query("FROM Category WHERE id IN :listId", Category.class,
+                Map.of("listId", listId));
+    }
+
+    @Override
     public Category findById(int id) {
         return crudRepository.optional("FROM Category WHERE id = :catId",
                 Category.class, Map.of("catId", id)).get();

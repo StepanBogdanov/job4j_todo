@@ -11,6 +11,7 @@ import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -50,9 +51,7 @@ public class TaskController {
     @PostMapping("/create")
     public String create(@ModelAttribute Task task, @RequestParam List<Integer> categoriesId, Model model, HttpSession session) {
         task.setUser((User) session.getAttribute("user"));
-        for (Integer id : categoriesId) {
-            task.addCategory(categoryService.findById(id));
-        }
+        task.addCategories(categoryService.findById(categoriesId));
         if (taskService.save(task) == null) {
             model.addAttribute("message", "Не удалось сохранить задание");
             return "errors/404";

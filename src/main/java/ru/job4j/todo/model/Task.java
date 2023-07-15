@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -44,6 +45,10 @@ public class Task {
 
     public void addCategory(Category category) {
         categories.add(category);
+    }
+
+    public void addCategories(Collection<Category> categoryCollection) {
+        categories.addAll(categoryCollection);
     }
 
 }

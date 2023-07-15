@@ -8,5 +8,7 @@ public interface CategoryService {
 
     Collection<Category> findAll();
 
+    Collection<Category> findById(Collection<Integer> listId);
+
     Category findById(int id);
 }

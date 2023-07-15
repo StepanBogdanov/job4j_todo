@@ -19,6 +19,11 @@ public class SimpleCategoryService implements CategoryService {
     }
 
     @Override
+    public Collection<Category> findById(Collection<Integer> listId) {
+        return categoryRepository.findById(listId);
+    }
+
+    @Override
     public Category findById(int id) {
         return categoryRepository.findById(id);
     }
