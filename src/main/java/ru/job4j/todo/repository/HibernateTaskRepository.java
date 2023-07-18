@@ -64,7 +64,7 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public boolean delete(int id) {
-        return crudRepository.bool("DELETE FROM Task t JOIN FETCH t.priority WHERE t.id = :taskId",
+        return crudRepository.bool("DELETE FROM Task WHERE id = :taskId",
                 Map.of("taskId", id));
     }
 }

@@ -71,7 +71,7 @@
                     <td th:text="${task.id}"/>
                     <td th:text="${task.user.name}"/>
                     <td><a th:text="${task.title}" th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a></td>
-                    <td th:text="${#temporals.format(task.created, 'dd-MM-yyyy HH:mm')}" />
+                    <td th:text="${#temporals.format(task.created.atZone('UTC').withZoneSameInstant(timeZone), 'dd-MM-yyyy HH:mm')}" />
                     <td th:text="${task.priority.name}"/>
                     <td th:text="${task.categories}"/>
                 </tr>

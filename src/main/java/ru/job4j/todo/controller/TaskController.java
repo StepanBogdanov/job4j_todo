@@ -11,8 +11,11 @@ import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.TimeZone;
 
 @Controller
 @RequestMapping("/tasks")
@@ -24,20 +27,29 @@ public class TaskController {
     private CategoryService categoryService;
 
     @GetMapping("/list/all")
-    public String getAll(Model model) {
+    public String getAll(Model model, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        var timeZone = user.getTimezone() == null ? TimeZone.getDefault() : ZoneId.of(user.getTimezone());
         model.addAttribute("tasks", taskService.findAll());
+        model.addAttribute("timeZone", timeZone);
         return "tasks/list/all";
     }
 
     @GetMapping("/list/done")
-    public String getDone(Model model) {
+    public String getDone(Model model, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        var timeZone = user.getTimezone() == null ? TimeZone.getDefault() : ZoneId.of(user.getTimezone());
         model.addAttribute("tasks", taskService.findDone());
+        model.addAttribute("timeZone", timeZone);
         return "tasks/list/done";
     }
 
     @GetMapping("/list/new")
-    public String getNew(Model model) {
+    public String getNew(Model model, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        var timeZone = user.getTimezone() == null ? TimeZone.getDefault() : ZoneId.of(user.getTimezone());
         model.addAttribute("tasks", taskService.findNew());
+        model.addAttribute("timeZone", timeZone);
         return "tasks/list/new";
     }
 
